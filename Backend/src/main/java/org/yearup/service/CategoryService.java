@@ -50,6 +50,7 @@ public class CategoryService
 
     public void delete(int categoryId)
     {
+        categoryRepository.deleteById(categoryId);
         // delete category
     }
 }
