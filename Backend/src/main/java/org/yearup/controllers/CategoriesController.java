@@ -33,14 +33,18 @@ public class CategoriesController {
     // add the appropriate annotation for a get action
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategories() {
-        List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        List<Category> category = categoryService.getAllCategories();
+        return ResponseEntity.ok(category);
     }
 
     // add the appropriate annotation for a get action
-    public Category getById(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getById(@PathVariable int id) {
         // get the category by id
-        return null;
+        Category category = categoryService.getById(id);
+        if (category == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(category);
     }
 
     // the url to return all products in category 1 would look like this
