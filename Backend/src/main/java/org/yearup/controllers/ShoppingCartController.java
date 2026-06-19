@@ -2,11 +2,8 @@ package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.User;
 import org.yearup.service.ShoppingCartService;
@@ -15,13 +12,13 @@ import org.yearup.service.UserService;
 import java.security.Principal;
 
 // convert this class to a REST controller
-// only logged in users should have access to these actions
+// only logged-in users should have access to these actions
 @RestController
 @RequestMapping("/cart")
 public class ShoppingCartController {
     // a shopping cart controller depends on the service layer
-    private ShoppingCartService shoppingCartService;
-    private UserService userService;
+    private final ShoppingCartService shoppingCartService;
+    private final UserService userService;
 
     @Autowired
     public ShoppingCartController(ShoppingCartService shoppingCartService, UserService userService) {
@@ -32,10 +29,8 @@ public class ShoppingCartController {
     // each method in this controller requires a Principal object as a parameter
     @GetMapping
     public ResponseEntity<ShoppingCart> getCart(Principal principal) {
-        // get the currently logged in username
-        if(principal == null){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        // get the currently logged-in username
+
         String userName = principal.getName();
         // find database user by username
         User user = userService.getByUserName(userName);
@@ -46,7 +41,18 @@ public class ShoppingCartController {
     }
 
     // add a POST method to add a product to the cart - the url should be
+    @PostMapping("/products/{id}")
     // https://localhost:8080/cart/products/15  (15 is the productId to be added)
+    public ResponseEntity<ShoppingCart> addToCart(@PathVariable int id, Principal principal){
+        if(principal == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String username = principal.getName();
+        User user = userService.getByUserName(username);
+        int userId  = user.getId();
+        ShoppingCart cart = shoppingCartService.getByUserId(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cart);
+    }
     // return the updated cart with status 201 Created
 
 
