@@ -73,9 +73,9 @@ public class CategoriesController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category category) {
         // update the category by id and return the updated category (200 OK)
-        Category updated = categoryService.update(id,category);
+        Category updated = categoryService.update(id, category);
 
-        if (updated == null ){
+        if (updated == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updated);

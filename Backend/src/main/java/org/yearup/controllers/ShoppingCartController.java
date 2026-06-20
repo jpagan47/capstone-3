@@ -30,7 +30,7 @@ public class ShoppingCartController {
     @GetMapping
     public ResponseEntity<ShoppingCart> getCart(Principal principal) {
         // get the currently logged-in username
-        if(principal == null){
+        if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String userName = principal.getName();
@@ -45,18 +45,17 @@ public class ShoppingCartController {
     // add a POST method to add a product to the cart - the url should be
     @PostMapping("/products/{id}")
     // https://localhost:8080/cart/products/15  (15 is the productId to be added)
-    public ResponseEntity<ShoppingCart> addToCart(@PathVariable int id, Principal principal){
-        if(principal == null){
+    public ResponseEntity<ShoppingCart> addToCart(@PathVariable int id, Principal principal) {
+        if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String username = principal.getName();
         User user = userService.getByUserName(username);
-        int userId  = user.getId();
+        int userId = user.getId();
         ShoppingCart cart = shoppingCartService.getByUserId(userId);
         // return the updated cart with status 201 Created
         return ResponseEntity.status(HttpStatus.CREATED).body(cart);
     }
-
 
 
     // add a PUT method to update an existing product in the cart - the url should be
@@ -67,7 +66,7 @@ public class ShoppingCartController {
     // add a DELETE method to clear all products from the current users cart
     //Todo fix this endpoint
     @DeleteMapping
-    public ResponseEntity<ShoppingCart> deleteCart(Principal principal){
+    public ResponseEntity<ShoppingCart> deleteCart(Principal principal) {
         User user = userService.getByUserName(principal.getName());
         shoppingCartService.clearCart(user.getId());
         ShoppingCart cart = shoppingCartService.getCart(user.getId());
