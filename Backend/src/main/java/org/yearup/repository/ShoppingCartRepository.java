@@ -19,4 +19,5 @@ public interface ShoppingCartRepository extends JpaRepository<CartItem, Integer>
     List<ShoppingCartItem> getByUserId(int userId);
 
 //    void add(int userId, int productId);
+    
 }
