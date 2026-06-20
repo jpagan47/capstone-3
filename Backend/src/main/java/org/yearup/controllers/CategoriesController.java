@@ -20,8 +20,8 @@ import java.util.List;
 @RequestMapping("/categories")
 @CrossOrigin
 public class CategoriesController {
-    private CategoryService categoryService;
-    private ProductService productService;
+    private final CategoryService categoryService;
+    private final ProductService productService;
 
     // create an Autowired constructor to inject the categoryService and productService
     @Autowired
