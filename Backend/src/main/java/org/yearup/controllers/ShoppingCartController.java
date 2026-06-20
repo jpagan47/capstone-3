@@ -52,6 +52,7 @@ public class ShoppingCartController {
         String username = principal.getName();
         User user = userService.getByUserName(username);
         int userId = user.getId();
+        shoppingCartService.addToCart(user.getId(),id);
         ShoppingCart cart = shoppingCartService.getByUserId(userId);
         // return the updated cart with status 201 Created
         return ResponseEntity.status(HttpStatus.CREATED).body(cart);

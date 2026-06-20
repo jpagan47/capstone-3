@@ -23,11 +23,13 @@ public class ShoppingCartService {
     public ShoppingCart getByUserId(int userId) {
         // load the user's cart rows, look up each product, and build the ShoppingCart
         ShoppingCart cart = new ShoppingCart();
-        List<ShoppingCartItem> items = shoppingCartRepository.getByUserId(userId);
-        for (ShoppingCartItem item : items) {
+        List<CartItem> items = shoppingCartRepository.getByUserId(userId);
+        for (CartItem item : items) {
             Product product = productService.getById(item.getProductId());
-            item.setProduct(product);
-            cart.add(item);
+            ShoppingCartItem cartItem = new ShoppingCartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(item.getQuantity());
+            cart.add(cartItem);
         }
         return cart;
     }
