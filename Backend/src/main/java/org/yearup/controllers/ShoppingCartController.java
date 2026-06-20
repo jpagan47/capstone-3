@@ -67,6 +67,9 @@ public class ShoppingCartController {
     //Todo fix this endpoint
     @DeleteMapping
     public ResponseEntity<ShoppingCart> deleteCart(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         User user = userService.getByUserName(principal.getName());
         shoppingCartService.clearCart(user.getId());
         ShoppingCart cart = shoppingCartService.getCart(user.getId());

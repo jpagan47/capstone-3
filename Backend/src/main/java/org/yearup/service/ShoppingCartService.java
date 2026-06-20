@@ -49,7 +49,11 @@ public class ShoppingCartService {
     }
 
     public void clearCart(int userId) {
-        shoppingCartRepository.deleteByUserId(userId);
+        List<CartItem> items = shoppingCartRepository.findByUserId(userId);
+        for (CartItem item : items){
+            shoppingCartRepository.delete(item);
+        }
+//        shoppingCartRepository.deleteByUserId(userId);
 
     }
 
