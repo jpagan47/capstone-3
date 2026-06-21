@@ -53,7 +53,7 @@ public class ShoppingCartController {
         String username = principal.getName();
         User user = userService.getByUserName(username);
         int userId = user.getId();
-        shoppingCartService.addToCart(user.getId(),id);
+        shoppingCartService.addToCart(user.getId(), id);
         ShoppingCart cart = shoppingCartService.getByUserId(userId);
         // return the updated cart with status 201 Created
         return ResponseEntity.status(HttpStatus.CREATED).body(cart);
@@ -63,12 +63,12 @@ public class ShoppingCartController {
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15  (15 is the productId to be updated)
     @PutMapping("/products/{id}")
-    public ResponseEntity<ShoppingCart> updateCartItem(@PathVariable int id,@RequestBody ShoppingCartItem item, Principal principal ){
+    public ResponseEntity<ShoppingCart> updateCartItem(@PathVariable int id, @RequestBody ShoppingCartItem item, Principal principal) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         User user = userService.getByUserName(principal.getName());
-        ShoppingCart cart = shoppingCartService.updateQuantity(user.getId(),id,item.getQuantity());
+        ShoppingCart cart = shoppingCartService.updateQuantity(user.getId(), id, item.getQuantity());
         return ResponseEntity.ok(cart);
     }
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
@@ -83,7 +83,7 @@ public class ShoppingCartController {
         }
         User user = userService.getByUserName(principal.getName());
         shoppingCartService.clearCart(user.getId());
-        ShoppingCart cart = shoppingCartService.getCart(user.getId());
+        ShoppingCart cart = shoppingCartService.getByUserId(user.getId());
         return ResponseEntity.ok(cart);
 
     }
