@@ -46,17 +46,14 @@ public class ShoppingCartService {
             item.setQuantity((item.getQuantity() + 1));
         }
         shoppingCartRepository.save(item);
-
         return getByUserId(userId);
     }
 
     public void clearCart(int userId) {
         List<CartItem> items = shoppingCartRepository.findByUserId(userId);
-        for (CartItem item : items){
+        for (CartItem item : items) {
             shoppingCartRepository.delete(item);
         }
-//        shoppingCartRepository.deleteByUserId(userId);
-
     }
 
     public ShoppingCart getCart(int id) {
@@ -64,18 +61,9 @@ public class ShoppingCartService {
     }
 
     public ShoppingCart updateQuantity(int userId, int productId, int quantity) {
-        CartItem item = shoppingCartRepository.findByUserIdAndProductId(userId,productId);
+        CartItem item = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
         item.setQuantity(quantity);
         shoppingCartRepository.save(item);
         return getByUserId(userId);
     }
-
-//    public ShoppingCart getCart(int id) {
-//        ShoppingCart cart = new ShoppingCart();
-//        List<ShoppingCartItem> items = shoppingCartRepository.findByUserId(id);
-//        for (CartItem item : items){
-//            cart.add(item);
-//        }
-//        return null;
 }
-

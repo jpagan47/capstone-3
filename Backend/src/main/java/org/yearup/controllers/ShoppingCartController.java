@@ -62,6 +62,7 @@ public class ShoppingCartController {
 
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15  (15 is the productId to be updated)
+    // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
     @PutMapping("/products/{id}")
     public ResponseEntity<ShoppingCart> updateCartItem(@PathVariable int id, @RequestBody ShoppingCartItem item, Principal principal) {
         if (principal == null) {
@@ -71,7 +72,6 @@ public class ShoppingCartController {
         ShoppingCart cart = shoppingCartService.updateQuantity(user.getId(), id, item.getQuantity());
         return ResponseEntity.ok(cart);
     }
-    // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
 
 
     // add a DELETE method to clear all products from the current users cart
@@ -84,10 +84,10 @@ public class ShoppingCartController {
         User user = userService.getByUserName(principal.getName());
         shoppingCartService.clearCart(user.getId());
         ShoppingCart cart = shoppingCartService.getByUserId(user.getId());
+        // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
         return ResponseEntity.ok(cart);
 
     }
 
-    // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
 
 }
