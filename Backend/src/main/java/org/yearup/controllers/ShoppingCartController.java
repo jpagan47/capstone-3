@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.ShoppingCart;
+import org.yearup.models.ShoppingCartItem;
 import org.yearup.models.User;
 import org.yearup.service.ShoppingCartService;
 import org.yearup.service.UserService;
@@ -61,6 +62,15 @@ public class ShoppingCartController {
 
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15  (15 is the productId to be updated)
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ShoppingCart> updateCartItem(@PathVariable int id,@RequestBody ShoppingCartItem item, Principal principal ){
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User user = userService.getByUserName(principal.getName());
+        ShoppingCart cart = shoppingCartService.updateQuantity(user.getId(),id,item.getQuantity());
+        return ResponseEntity.ok(cart);
+    }
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
 
 

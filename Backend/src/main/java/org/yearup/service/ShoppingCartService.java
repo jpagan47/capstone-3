@@ -63,6 +63,13 @@ public class ShoppingCartService {
         return null;
     }
 
+    public ShoppingCart updateQuantity(int userId, int productId, int quantity) {
+        CartItem item = shoppingCartRepository.findByUserIdAndProductId(userId,productId);
+        item.setQuantity(quantity);
+        shoppingCartRepository.save(item);
+        return getByUserId(userId);
+    }
+
 //    public ShoppingCart getCart(int id) {
 //        ShoppingCart cart = new ShoppingCart();
 //        List<ShoppingCartItem> items = shoppingCartRepository.findByUserId(id);
