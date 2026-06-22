@@ -22,4 +22,9 @@ public class ProfileService
     public Profile getByUserId(int id) {
         return profileRepository.findByUserId(id);
     }
+
+    public Profile update(int userid, Profile profile) {
+        profile.setUserId(userid);
+        return profileRepository.save(profile);
+    }
 }

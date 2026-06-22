@@ -2,9 +2,7 @@ package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Profile;
 import org.yearup.models.User;
 import org.yearup.service.ProfileService;
@@ -32,5 +30,15 @@ public class ProfileController {
 
         return ResponseEntity.ok(profile);
     }
+    @PutMapping
+    public ResponseEntity<Profile> updateProfile(Principal principal, @RequestBody Profile profile){
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        User user = userService.getByUserName(principal.getName());
+        Profile updateProfile = profileService.update(user.getId(), profile);
+        return ResponseEntity.ok(updateProfile);
+    }
+
 
 }
