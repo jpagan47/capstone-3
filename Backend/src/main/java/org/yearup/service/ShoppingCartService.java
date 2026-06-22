@@ -5,19 +5,23 @@ import org.yearup.models.CartItem;
 import org.yearup.models.Product;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.ShoppingCartItem;
+import org.yearup.repository.ProductRepository;
 import org.yearup.repository.ShoppingCartRepository;
 
 import java.util.List;
+
 
 @Service
 public class ShoppingCartService {
     // a shopping cart is built from cart rows plus a product lookup for each row
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
-    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, ProductService productService) {
+    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, ProductService productService, ProductRepository productRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     public ShoppingCart getByUserId(int userId) {
@@ -59,5 +63,19 @@ public class ShoppingCartService {
         item.setQuantity(quantity);
         shoppingCartRepository.save(item);
         return getByUserId(userId);
+    }
+
+    public ShoppingCart getCart(int id) {
+        ShoppingCart cart = new ShoppingCart();
+        List<CartItem> items = shoppingCartRepository.findByUserId(id);
+
+        for( CartItem item : items){
+            Product product = productRepository.findById(item.getProductId()).orElse(null);
+            ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+            shoppingCartItem.setProduct(product);
+            shoppingCartItem.setQuantity(item.getQuantity());
+            cart.add(shoppingCartItem);
+        }
+        return cart;
     }
 }
