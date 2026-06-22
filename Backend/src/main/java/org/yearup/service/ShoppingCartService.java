@@ -51,9 +51,7 @@ public class ShoppingCartService {
 
     public void clearCart(int userId) {
         List<CartItem> items = shoppingCartRepository.findByUserId(userId);
-        for (CartItem item : items) {
-            shoppingCartRepository.delete(item);
-        }
+        shoppingCartRepository.deleteAll(items);
     }
 
     public ShoppingCart getCart(int id) {

@@ -13,8 +13,8 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
-    private ProfileService profileService;
-    private UserService userService;
+    private final ProfileService profileService;
+    private final UserService userService;
 
     public ProfileController(ProfileService profileService, UserService userService) {
         this.profileService = profileService;

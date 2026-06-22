@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping
+@RequestMapping("/orders")
 public class OrdersController {
     @PostMapping
     public ResponseEntity<Void> createOrder(Principal principal){
+
         return ResponseEntity.ok().build();
     }
 }
