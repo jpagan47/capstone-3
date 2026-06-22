@@ -16,12 +16,13 @@ public class ProfileController {
     private ProfileService profileService;
     private UserService userService;
 
-    public ProfileController( ProfileService profileService,UserService userService){
+    public ProfileController(ProfileService profileService, UserService userService) {
         this.profileService = profileService;
         this.userService = userService;
     }
+
     @GetMapping
-    public ResponseEntity<Profile> getProfile(Principal principal){
+    public ResponseEntity<Profile> getProfile(Principal principal) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -30,8 +31,9 @@ public class ProfileController {
 
         return ResponseEntity.ok(profile);
     }
+
     @PutMapping
-    public ResponseEntity<Profile> updateProfile(Principal principal, @RequestBody Profile profile){
+    public ResponseEntity<Profile> updateProfile(Principal principal, @RequestBody Profile profile) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
