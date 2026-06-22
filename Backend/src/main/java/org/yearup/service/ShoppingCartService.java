@@ -54,10 +54,6 @@ public class ShoppingCartService {
         shoppingCartRepository.deleteAll(items);
     }
 
-    public ShoppingCart getCart(int id) {
-        return null;
-    }
-
     public ShoppingCart updateQuantity(int userId, int productId, int quantity) {
         CartItem item = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
         item.setQuantity(quantity);
