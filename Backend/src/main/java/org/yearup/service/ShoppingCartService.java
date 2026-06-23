@@ -69,7 +69,7 @@ public class ShoppingCartService {
         ShoppingCart cart = new ShoppingCart();
         List<CartItem> items = shoppingCartRepository.findByUserId(id);
 
-        for( CartItem item : items){
+        for (CartItem item : items) {
             Product product = productRepository.findById(item.getProductId()).orElse(null);
             ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
             shoppingCartItem.setProduct(product);
