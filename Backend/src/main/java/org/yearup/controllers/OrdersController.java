@@ -14,6 +14,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/orders")
+
 public class OrdersController {
     private final UserService userService;
     private final ShoppingCartService shoppingCartServices;
@@ -24,6 +25,7 @@ public class OrdersController {
         this.shoppingCartServices = shoppingCartServices;
         this.orderService = orderService;
     }
+
 
     @GetMapping
     public ResponseEntity<ShoppingCart> checkoutCart(Principal principal) {
