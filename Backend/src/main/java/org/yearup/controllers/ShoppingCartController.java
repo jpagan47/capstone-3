@@ -86,7 +86,7 @@ public class ShoppingCartController {
         ShoppingCart cart = shoppingCartService.getByUserId(user.getId());
         // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
 
-        return ResponseEntity.ok(cart);
+        return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 
