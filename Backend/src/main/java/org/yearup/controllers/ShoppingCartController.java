@@ -14,6 +14,7 @@ import java.security.Principal;
 
 // convert this class to a REST controller
 // only logged-in users should have access to these actions
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/cart")
 public class ShoppingCartController {
@@ -75,7 +76,6 @@ public class ShoppingCartController {
 
 
     // add a DELETE method to clear all products from the current users cart
-    //Todo fix this endpoint
     @DeleteMapping
     public ResponseEntity<ShoppingCart> deleteCart(Principal principal) {
         if (principal == null) {
@@ -85,6 +85,7 @@ public class ShoppingCartController {
         shoppingCartService.clearCart(user.getId());
         ShoppingCart cart = shoppingCartService.getByUserId(user.getId());
         // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
+
         return ResponseEntity.ok(cart);
 
     }
