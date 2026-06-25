@@ -80,7 +80,7 @@ public class ShoppingCartController {
         shoppingCartService.clearCart(user.getId());
         ShoppingCart cart = shoppingCartService.getByUserId(user.getId());
         // Return a successful response after clearing the cart
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(cart);
 
     }
 
