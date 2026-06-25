@@ -12,13 +12,13 @@ import org.yearup.service.UserService;
 
 import java.security.Principal;
 
-// convert this class to a REST controller
-// only logged-in users should have access to these actions
+// Handles shopping cart operations for authenticated users
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/cart")
 public class ShoppingCartController {
-    // a shopping cart controller depends on the service layer
+    // Service used to manage users and shopping carts
     private final ShoppingCartService shoppingCartService;
     private final UserService userService;
 
@@ -28,25 +28,23 @@ public class ShoppingCartController {
         this.userService = userService;
     }
 
-    // each method in this controller requires a Principal object as a parameter
+    // Return the current user's shopping cart
     @GetMapping
     public ResponseEntity<ShoppingCart> getCart(Principal principal) {
-        // get the currently logged-in username
+        // Ensure the request is made by an authenticated user
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String userName = principal.getName();
-        // find database user by username
+        // Look up the current user's account
         User user = userService.getByUserName(userName);
         int userId = user.getId();
         ShoppingCart cart = shoppingCartService.getByUserId(userId);
-        // use the shoppingCartService to get all items in the cart and return the cart
         return ResponseEntity.ok(cart);
     }
 
-    // add a POST method to add a product to the cart - the url should be
+    // Add a product to the current user's cart
     @PostMapping("/products/{id}")
-    // https://localhost:8080/cart/products/15  (15 is the productId to be added)
     public ResponseEntity<ShoppingCart> addToCart(@PathVariable int id, Principal principal) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -54,16 +52,13 @@ public class ShoppingCartController {
         String username = principal.getName();
         User user = userService.getByUserName(username);
         int userId = user.getId();
-//        shoppingCartService.addToCart(user.getId(), id);
         ShoppingCart cart = shoppingCartService.addToCart(userId,id);
-        // return the updated cart with status 201 Created
+        // Return the updated cart after the item is added
         return ResponseEntity.status(HttpStatus.CREATED).body(cart);
     }
 
+    // Update the quantitty of an item in the current user's cart
 
-    // add a PUT method to update an existing product in the cart - the url should be
-    // https://localhost:8080/cart/products/15  (15 is the productId to be updated)
-    // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated; return the cart (200 OK)
     @PutMapping("/products/{id}")
     public ResponseEntity<ShoppingCart> updateCartItem(@PathVariable int id, @RequestBody ShoppingCartItem item, Principal principal) {
         if (principal == null) {
@@ -75,7 +70,7 @@ public class ShoppingCartController {
     }
 
 
-    // add a DELETE method to clear all products from the current users cart
+    // Remove all items from the current user's cart
     @DeleteMapping
     public ResponseEntity<ShoppingCart> deleteCart(Principal principal) {
         if (principal == null) {
@@ -84,8 +79,7 @@ public class ShoppingCartController {
         User user = userService.getByUserName(principal.getName());
         shoppingCartService.clearCart(user.getId());
         ShoppingCart cart = shoppingCartService.getByUserId(user.getId());
-        // https://localhost:8080/cart  - return the (now empty) cart so the front end can refresh it (200 OK)
-
+        // Return a successful response after clearing the cart
         return ResponseEntity.status(HttpStatus.OK).build();
 
     }

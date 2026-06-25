@@ -12,13 +12,18 @@ import org.yearup.service.UserService;
 
 import java.security.Principal;
 
+//Handles checkout request for the current user's cart
+
 @RestController
 @RequestMapping("/orders")
+
 
 public class OrdersController {
     private final UserService userService;
     private final ShoppingCartService shoppingCartServices;
     private final OrderService orderService;
+
+    //Inject the services needed to process an order
 
     public OrdersController(UserService userService, ShoppingCartService shoppingCartServices, OrderService orderService) {
         this.userService = userService;
@@ -26,9 +31,11 @@ public class OrdersController {
         this.orderService = orderService;
     }
 
+    //Validate the signed-in user before starting checkout
 
     @GetMapping
     public ResponseEntity<ShoppingCart> checkoutCart(Principal principal) {
+       // Reject checkout request from unauthorized users
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

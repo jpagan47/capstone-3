@@ -17,11 +17,13 @@ public class ProductsController
 {
     private final ProductService productService;
 
+    // Inject the product service
     public ProductsController(ProductService productService)
     {
         this.productService = productService;
     }
 
+    //Search products using optional filters
     @GetMapping("")
     @PreAuthorize("permitAll()")
     public List<Product> search(@RequestParam(name="cat", required = false) Integer categoryId,
@@ -31,19 +33,19 @@ public class ProductsController
     {
         return productService.search(categoryId, minPrice, maxPrice, subCategory);
     }
-
+    // Return a product by ID
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
     public Product getById(@PathVariable int id)
     {
         Product product = productService.getById(id);
-
+        //Returns 404 if the product does not exist
         if (product == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         return product;
     }
-
+    // Create a new product as an ADMIN
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Product> addProduct(@RequestBody Product product)
@@ -51,21 +53,23 @@ public class ProductsController
         Product saved = productService.create(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
-
+    // Update a product as an ADMIN
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Product updateProduct(@PathVariable int id, @RequestBody Product product)
     {
+        //Verify the product exist before updating it
         if (productService.getById(id) == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         return productService.update(id, product);
     }
-
+    // Delete a product by its ID as an ADMIN
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable int id)
     {
+        //Verifying the product exist before deleting it 
         if (productService.getById(id) == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
