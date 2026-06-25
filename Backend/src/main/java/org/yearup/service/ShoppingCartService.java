@@ -51,7 +51,7 @@ public class ShoppingCartService {
            shoppingCartRepository.save(product);
         } else {
             item.setQuantity((item.getQuantity() + 1));
-            shoppingCartRepository.save(product);
+            shoppingCartRepository.save(item);
         }
         return getByUserId(userId);
     }
