@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class ShoppingCartService {
-    // a shopping cart is built from cart rows plus a product lookup for each row
+    // Builds shopping carts from saved cart items and product details
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductService productService;
     private final ProductRepository productRepository;
@@ -26,8 +26,8 @@ public class ShoppingCartService {
     }
 
     public ShoppingCart getByUserId(int userId) {
-        // load the user's cart rows, look up each product, and build the ShoppingCart
         ShoppingCart cart = new ShoppingCart();
+        //Convert each saved cart row into a full cart item
         List<CartItem> items = shoppingCartRepository.getByUserId(userId);
         for (CartItem item : items) {
             Product product = productService.getById(item.getProductId());
@@ -39,7 +39,7 @@ public class ShoppingCartService {
         return cart;
     }
 
-    // add additional methods here
+    // Add the product or increase the quantity if it is already in the cart
     public ShoppingCart addToCart(int userId, int productId) {
         CartItem product =  new CartItem();
         product.setProductId(productId);
@@ -55,12 +55,14 @@ public class ShoppingCartService {
         }
         return getByUserId(userId);
     }
+
+    // Remove all saved cart items for the user
     @Transactional
     public void clearCart(int userId) {
-//        List<CartItem> items = shoppingCartRepository.findByUserId(userId);
         shoppingCartRepository.deleteByUserId(userId);
     }
 
+    //Update the quantity for a specific product in the user's cart
     public ShoppingCart updateQuantity(int userId, int productId, int quantity) {
         CartItem item = shoppingCartRepository.findByUserIdAndProductId(userId, productId);
         item.setQuantity(quantity);
@@ -68,6 +70,7 @@ public class ShoppingCartService {
         return getByUserId(userId);
     }
 
+    //Build a cart from the user's saved cart items
     public ShoppingCart getCart(int id) {
         ShoppingCart cart = new ShoppingCart();
         List<CartItem> items = shoppingCartRepository.findByUserId(id);
